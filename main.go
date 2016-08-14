@@ -14,11 +14,9 @@ type User struct {
 
 
 func main() {
-
-
     e := echo.New()
     e.GET("/", func(c echo.Context) error {
-        user := User{Name: "misu"}
+        user := User{Name: "hello eotld"}
         return c.JSON(http.StatusCreated, user)
     })
 
