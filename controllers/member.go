@@ -2,16 +2,27 @@ package controllers
 
 import (
     "net/http"
+    "strconv"
     "github.com/labstack/echo"
     "labix.org/v2/mgo/bson"
 
     "ReceitAnalysisApi/db"
-    "strconv"
+    "ReceitAnalysisApi/util"
 )
 
+type PostResult struct {
+    Member `json:"member"`
+    Validate
+}
+
 type Member struct {
-    Name  string `json:"name"`
-    Present bool `json:"present"`
+    Name  string `json:"name" bson:"name"`
+    Present bool `json:"present" bson:"present"`
+}
+
+type Validate struct {
+    Result bool `json:"result"`
+    Message string `json:"message"`
 }
 
 func FetchMembers(c echo.Context) error {
@@ -34,14 +45,46 @@ func PostMember(c echo.Context) error {
 
     con := db.Mongo.DB("member_shuffles").C(collectionId)
 
-    member := Member{Name: c.FormValue("name"), Present: true}
+    name := c.FormValue("name");
+
+    member := Member{
+        Name: name,
+        Present: true,
+    }
+
+    result, message := util.ValidateMember(name)
+
+    if !result {
+        validate := Validate {
+            Result: result,
+            Message: message,
+        }
+        return c.JSON(http.StatusCreated, validate)
+    }
+
+    isUnique := con.Find(bson.M{"name": name}).One(&member)
+    if isUnique == nil {
+        validate := Validate {
+            Result: false,
+            Message: name+" is already registered",
+        }
+        return c.JSON(http.StatusCreated, validate)
+    }
 
     err := con.Insert(member)
     if err != nil {
         panic(err)
     }
 
-    return c.JSON(http.StatusCreated, member)
+    postResult := PostResult{
+        Member: member,
+        Validate: Validate {
+            Result: true,
+            Message: "",
+        },
+    }
+
+    return c.JSON(http.StatusCreated, postResult)
 }
 
 func PutMember(c echo.Context) error {
@@ -66,3 +109,4 @@ func PutMember(c echo.Context) error {
 
     return c.JSON(http.StatusCreated, member)
 }
+
