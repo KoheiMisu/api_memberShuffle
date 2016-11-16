@@ -9,11 +9,6 @@ import (
     "ReceitAnalysisApi/db"
 )
 
-type Member struct {
-    Name  string `json:"name" bson:"name"`
-    Present bool `json:"present, string" bson:"present"`
-}
-
 func main() {
     e := echo.New()
     e.Use(middleware.CORS())
