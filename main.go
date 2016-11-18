@@ -2,11 +2,10 @@ package main
 
 import (
     "github.com/labstack/echo"
-    "github.com/labstack/echo/engine/standard"
     "github.com/labstack/echo/middleware"
 
-    "ReceitAnalysisApi/controllers"
-    "ReceitAnalysisApi/db"
+    "api_memberShuffle/controllers"
+    "api_memberShuffle/db"
 )
 
 func main() {
@@ -15,11 +14,11 @@ func main() {
 
     defer db.Mongo.Close()
 
-    e.Post("/api/v1/members", controllers.PostMember)
+    e.POST("/api/v1/members", controllers.PostMember)
 
-    e.Get("/api/v1/members", controllers.FetchMembers)
+    e.GET("/api/v1/members", controllers.FetchMembers)
 
-    e.Put("/api/v1/members", controllers.PutMember)
+    e.PUT("/api/v1/members", controllers.PutMember)
 
-    e.Run(standard.New(":5000"))
+    e.Logger.Fatal(e.Start(":5000"))
 }

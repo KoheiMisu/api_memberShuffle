@@ -6,8 +6,8 @@ import (
     "github.com/labstack/echo"
     "labix.org/v2/mgo/bson"
 
-    "ReceitAnalysisApi/db"
-    "ReceitAnalysisApi/util"
+    "api_memberShuffle/db"
+    "api_memberShuffle/util"
 )
 
 type PostResult struct {

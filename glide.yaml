@@ -1,4 +1,4 @@
-package: ReceitAnalysisApi
+package: api_memberShuffle
 import:
 - package: golang.org/x/net
   subpackages:
