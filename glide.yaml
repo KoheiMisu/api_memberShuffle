@@ -1,0 +1,13 @@
+package: api_memberShuffle
+import:
+- package: golang.org/x/net
+  subpackages:
+  - context
+- package: golang.org/x/oauth2
+  subpackages:
+  - google
+- package: google.golang.org/api
+  subpackages:
+  - vision/v1
+- package: gopkg.in/godo.v2
+  version: ^2.0.9
