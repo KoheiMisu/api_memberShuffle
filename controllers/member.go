@@ -110,3 +110,26 @@ func PutMember(c echo.Context) error {
     return c.JSON(http.StatusCreated, member)
 }
 
+func DeleteMember(c echo.Context) error {
+
+    cId := c.FormValue("cId")
+
+    con := db.Mongo.DB("member_shuffles").C(cId)
+
+    name := c.FormValue("name")
+
+    var present bool
+    present, _ = strconv.ParseBool(c.FormValue("present"))
+
+    member := Member{Name: name, Present: present}
+
+    query := bson.M{"name": name}
+
+    err := con.Remove(query)
+    if err != nil {
+        panic(err)
+    }
+
+    return c.JSON(http.StatusCreated, member)
+}
+

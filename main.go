@@ -20,5 +20,7 @@ func main() {
 
     e.PUT("/api/v1/members", controllers.PutMember)
 
+    e.DELETE("/api/v1/members", controllers.DeleteMember)
+
     e.Logger.Fatal(e.Start(":5000"))
 }
